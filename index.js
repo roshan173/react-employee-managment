@@ -12,6 +12,9 @@ import {
 } from "react-router-dom";
 
 class App extends Component {
+  refreshEmployees() {
+    this.employee.refreshEmployees();
+  }
   render() {
     return (
       <Router>
@@ -19,8 +22,8 @@ class App extends Component {
       <div className='container'>
         <h2>Employee Management App</h2>
         <Switch>
-          <Route path='/employees' exact component={Employee}/>
-          <Route path='/employees/:id'  component={EmployeeDetails}/>
+          <Route path='/employees' exact component={Employee} ref={employee => this.employee = employee}/>
+          <Route path='/employees/:id'  component={EmployeeDetails} func={this.refreshEmployees.bind(this)}/>
           <Route component={Error}/>
         </Switch>
       </div>
@@ -30,4 +33,5 @@ class App extends Component {
   }
 }
 
-render(<App />, document.getElementById("root"));
+const Parent = render(<App />, document.getElementById("root"));
+Parent.forceUpdate()

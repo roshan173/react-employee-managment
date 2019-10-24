@@ -3,6 +3,7 @@ import EmployeeDataService from '../services/EmployeeDataService'
 import '../style.css'
 
 class Employee extends Component{
+  _isMounted = false;
 
   constructor(){
     this.state = {
@@ -15,13 +16,19 @@ class Employee extends Component{
   }
 
   componentDidMount() {
+     this._isMounted = true;
     this.refreshEmployees()
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   refreshEmployees(){
     EmployeeDataService.listAllEmployees()
       .then(
         response => {
+          if(this._isMounted)
           this.setState({
             employees: response.data
           })
